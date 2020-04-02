@@ -21,8 +21,7 @@ public class Model {
 	private BordersDAO dao;
 	public Model() {
     dao = new BordersDAO ();
-	mappaBorders = new HashMap<>();
-	listaBorders = new LinkedList<>();
+	
 	mappaPaesi = new HashMap <Integer,Country> ();
 	mappaPaesi = dao.loadAllCountries(mappaPaesi);
 	listaPaesi = new LinkedList <Country> (mappaPaesi.values());
@@ -31,6 +30,8 @@ public class Model {
 		return listaPaesi;
 	}
 	public void creaGrafo (int anno) {
+		mappaBorders = new HashMap<>();
+		listaBorders = new LinkedList<>();
 		// 1. crea l oggetto grafo
 		this.grafo =new SimpleGraph<>(DefaultEdge.class);
 	    // 2. aggiungere i vertici
