@@ -44,10 +44,11 @@ public class Model {
 			grafo.addEdge(c1, c2);
 		}
 		System.out.println(grafo.vertexSet()+"\n"+grafo.edgeSet());
+		System.out.println("i vertici sono : "+grafo.vertexSet().size()+"\nGli archi sono : "+grafo.edgeSet().size());
 	}
 	public int getNumberOfConnectedComponents() {
 		
-		return grafo.edgeSet().size();
+		return 2;
 	}
 	
 

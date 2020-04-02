@@ -42,7 +42,7 @@ public class BordersDAO {
 	}
 
 	public Map<Integer,Border> getCountryPairs(int anno, Map <Integer, Border> mappaB, Map<Integer , Country> mappaC) {
-		String sql = "SELECT dyad,state1no,state1ab,state2no,state2ab,year FROM contiguity  WHERE  YEAR<=?";
+		String sql = "SELECT dyad,state1no,state1ab,state2no,state2ab,year FROM contiguity  WHERE contiguity.conttype=1 AND YEAR<=?";
 		Map <Integer, Border> result = new HashMap<>();
 		
 		try {
