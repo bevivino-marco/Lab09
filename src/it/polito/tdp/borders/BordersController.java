@@ -5,10 +5,13 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.jgrapht.graph.SimpleGraph;
 
+import it.polito.tdp.borders.model.Country;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +20,7 @@ import javafx.scene.control.TextField;
 
 public class BordersController {
 
-	Model m;
+	Model model;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -34,7 +37,7 @@ public class BordersController {
 	@FXML
 	
 	void doCalcolaConfini(ActionEvent event) {
-         txtResult.clear();
+       /*  txtResult.clear();
          try {
         	 m.creaGrafo(Integer.parseInt(txtAnno.getText().trim()));
         	 txtResult.appendText(m.getCountryCounts()+"\n"+m.getNumberOfConnectedComponents());
@@ -42,7 +45,38 @@ public class BordersController {
         			 
          }catch(NumberFormatException e) {
         	 txtResult.setText("inserire un anno corretto!!");
-         }
+         }*/
+		txtResult.clear();
+
+		int anno;
+
+		try {
+			anno = Integer.parseInt(txtAnno.getText());
+			if ((anno < 1816) || (anno > 2016)) {
+				txtResult.setText("Inserire un anno nell'intervallo 1816 - 2016");
+				return;
+			}
+			
+		} catch (NumberFormatException e) {
+			txtResult.setText("Inserire un anno nell'intervallo 1816 - 2016");
+			return;
+		}
+
+		try {
+			model.creaGrafo(anno);
+			List<Country> countries = model.getListaPaesi();
+			//cmbNazione.getItems().addAll(countries);
+			
+			txtResult.appendText(String.format("Numero componenti connesse: %d\n", model.getNumberOfConnectedComponents()));
+
+			Map<Country, Integer> stats = model.getCountryCounts();
+			for (Country country : stats.keySet())
+				txtResult.appendText(String.format("%s %d\n", country, stats.get(country)));
+
+		} catch (RuntimeException e) {
+			txtResult.setText("Errore: " + e.getMessage() + "\n");
+			return;
+		}
          
 		
 	}
@@ -54,7 +88,7 @@ public class BordersController {
 	}
 
 	public void setModel(Model m2) {
-		this.m=m2;
+		this.model=m2;
 		
 	}
 }
