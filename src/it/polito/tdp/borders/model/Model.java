@@ -33,14 +33,21 @@ public class Model {
 		// 1. crea l oggetto grafo
 		this.grafo =new SimpleGraph<>(DefaultEdge.class);
 	    // 2. aggiungere i vertici
-		Graphs.addAllVertices(this.grafo, this.listaPaesi);
+		//Graphs.addAllVertices(this.grafo, this.listaPaesi); COSI FACENDO
+		// NON TENGO CONTO DEGLI STATI CHE NON SONO CONFINANTI	
 		// 3.A creo la mappa dei confini
 		mappaBorders = dao.getCountryPairs(anno, mappaBorders, mappaPaesi);
 		listaBorders = new LinkedList <Border> (mappaBorders.values());
+		// 2. aggiungere i vertici
 		// 3.B aggiungo i vertici
+		if (listaBorders.size()==0|| listaPaesi.size()==0) {
+			
+		}
 		for (Border b : listaBorders) {
 			Country c1 = b.getStatoA();
 			Country c2 = b.getStatoB();
+			grafo.addVertex(c1);
+			grafo.addVertex(c2);
 			grafo.addEdge(c1, c2);
 		}
 		System.out.println(grafo.vertexSet()+"\n"+grafo.edgeSet());
