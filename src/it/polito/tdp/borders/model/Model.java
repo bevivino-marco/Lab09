@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -40,7 +41,9 @@ public class Model {
 		listaBorders = new LinkedList <Border> (mappaBorders.values());
 		// 2. aggiungere i vertici
 		// 3.B aggiungo i vertici
-		if (listaBorders.size()==0|| listaPaesi.size()==0) {
+		if (listaBorders.isEmpty()) {
+		
+				throw new RuntimeException("No country pairs for specified year");
 			
 		}
 		for (Border b : listaBorders) {
@@ -54,8 +57,17 @@ public class Model {
 		System.out.println("i vertici sono : "+grafo.vertexSet().size()+"\nGli archi sono : "+grafo.edgeSet().size());
 	}
 	public int getNumberOfConnectedComponents() {
+		ConnectivityInspector<Country, DefaultEdge> cI = new ConnectivityInspector <Country, DefaultEdge>(grafo);
 		
-		return 2;
+		return cI.connectedSets().size();
+	}
+	public Map<Country, Integer> getCountryCounts() {
+		Map<Country, Integer> mappa = new HashMap <Country, Integer>();
+		for (Country c : grafo.vertexSet()) {
+			mappa.put(c, grafo.degreeOf(c));
+		}
+		
+		return mappa;
 	}
 	
 
