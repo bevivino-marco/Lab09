@@ -21,7 +21,10 @@ public class TestModel {
 		Map<Country, Integer> stats = model.getCountryCounts();
 		for (Country country : stats.keySet())
 			System.out.format("%s %d\n", country, stats.get(country));		
-		
+		System.out.format("Parto da : "+model.getListaPaesi().get(0).toString()+"\n");
+		System.out.format(model.getViciniRicorsione(model.getListaPaesi().get(0)).toString());
+	
 	}
+	
 
 }

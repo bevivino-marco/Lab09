@@ -15,6 +15,7 @@ import it.polito.tdp.borders.model.Country;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -33,6 +34,9 @@ public class BordersController {
 
 	@FXML // fx:id="txtResult"
 	private TextArea txtResult; // Value injected by FXMLLoader
+    @FXML
+    private ComboBox<Country> boxCountries;
+    private boolean grafoCreato=false;
 
 	@FXML
 	
@@ -64,6 +68,7 @@ public class BordersController {
 
 		try {
 			model.creaGrafo(anno);
+			grafoCreato=true;
 			List<Country> countries = model.getListaPaesi();
 			//cmbNazione.getItems().addAll(countries);
 			
@@ -77,18 +82,33 @@ public class BordersController {
 			txtResult.setText("Errore: " + e.getMessage() + "\n");
 			return;
 		}
+
+	    
          
+		
+	}
+	@FXML
+	void doTrovaVicini(ActionEvent event) {
+		if (boxCountries.getValue()==null ) {
+			txtResult.appendText("selezionare uno stato");
+		}else if(grafoCreato==false) {
+			txtResult.appendText("selezionare un anno corretto e calcolare i confini prima...");
+	    }else {
+			txtResult.appendText(model.getViciniRicorsione(boxCountries.getValue()).toString());
+		}
 		
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
 		assert txtAnno != null : "fx:id=\"txtAnno\" was not injected: check your FXML file 'Borders.fxml'.";
+		assert boxCountries != null : "fx:id=\"boxCountries\" was not injected: check your FXML file 'Borders.fxml'.";
 		assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Borders.fxml'.";
+	    
 	}
 
 	public void setModel(Model m2) {
 		this.model=m2;
-		
+		boxCountries.getItems().addAll(model.getListaPaesi());
 	}
 }
