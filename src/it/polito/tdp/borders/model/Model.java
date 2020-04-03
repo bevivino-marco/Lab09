@@ -154,37 +154,47 @@ public class Model {
 	}
 	public List <Country> getViciniRicorsione(Country source){
 		List <Country> parziale = new ArrayList <Country>();
-		List <Country> lista = new LinkedList <Country>(listaPaesi);
+		try {List <Country> lista = new LinkedList <Country>(Graphs.neighborListOf(grafo, source));
+		
+		}catch (IllegalArgumentException e) {
+			return null;
+		}
 		int livello = 0;
-		cerca(parziale,source, livello, lista);
+		
+		cerca(parziale,source);
 		return parziale;
+		
 	}
-	private void cerca(List<Country> parziale, Country source, int livello,List<Country> lista) {
-		if (livello ==0 ) {
-			parziale.add(source);
-		}
-		if (livello == lista.size()-1) {
-			System.out.println(parziale.toString());
-			return;
-		}
-		for (int i =0; i< lista.size(); i++) {
-			if (!parziale.contains(lista.get(i)) && areVicini(parziale.get(parziale.size()-1), lista.get(i))){
-				parziale.add(lista.get(i));
-				//lista.remove(i);
-				cerca (parziale, lista.get(i), livello+1,lista);
-				parziale.remove(lista.get(i));
+	private void cerca(List<Country> parziale, Country source) {
+		parziale.add(source);
+		for (Country c : Graphs.neighborListOf(grafo, source)) {
+			if (!parziale.contains(c)) {
+				cerca(parziale, c);
 			}
 		}
 		
 	}
-	private boolean areVicini(Country country, Country country2) {
-		List <Country> vicini = new LinkedList <Country>(Graphs.neighborListOf(grafo, country));
-		for (Country c : vicini) {
-			if (c.equals(country2)) {
-				return true;
-			}
+	public List <Country> getViciniIterativoManuale(Country source) {
+		
+		List <Country> visitati = new LinkedList<>();
+		List <Country> daVisitare = new LinkedList<>();
+		visitati.add(source);
+		try {
+			daVisitare.addAll(Graphs.neighborListOf(grafo, source));
+		}catch(IllegalArgumentException e) {
+			return null;
 		}
-		return false;
+		while (!daVisitare.isEmpty()) {
+			Country temp = daVisitare.remove(0);
+			visitati.add(temp);
+			List<Country> vicini = Graphs.neighborListOf(grafo, temp);
+			vicini.removeAll(visitati);
+			vicini.removeAll(daVisitare);
+			daVisitare.addAll(vicini);
+		}
+		return visitati;
+		
+		
 	}
 
 }

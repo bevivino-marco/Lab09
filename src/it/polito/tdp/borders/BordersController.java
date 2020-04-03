@@ -94,7 +94,11 @@ public class BordersController {
 		}else if(grafoCreato==false) {
 			txtResult.appendText("selezionare un anno corretto e calcolare i confini prima...");
 	    }else {
-			txtResult.appendText(model.getViciniRicorsione(boxCountries.getValue()).toString());
+			try {
+				txtResult.appendText(model.getViciniIterativoManuale(boxCountries.getValue()).toString());
+			}catch (NullPointerException e) {
+				txtResult.appendText("non sono presenti confini adiacenti al paese selezionato");
+			}
 		}
 		
 	}
